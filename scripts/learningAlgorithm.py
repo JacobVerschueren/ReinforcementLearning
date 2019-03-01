@@ -16,7 +16,7 @@ class LearningAlgorithm:
         while episode_count < n_episodes:
             episode_done = False
             while not episode_done:
-                print(self.state)
+                print('old_state: ', self.state)
                 print(self.strategy.policy[self.state])
                 action = np.random.choice(
                     self.strategy.mdp.actions,
@@ -29,7 +29,7 @@ class LearningAlgorithm:
                 print('percept: ', percept)
                 self.strategy.learn(percept, episode_count)
                 self.state = percept[2]
-                print('State after update: ', self.state)
+                print('State after update: ', self.state, '\n')
                 episode_done = percept[4]
 
             self.state = self.environment.reset()
@@ -41,5 +41,5 @@ class LearningAlgorithm:
         print_array = np.zeros((4,4))
         for i in range(4):
             for j in range (4):
-                print_array[i,j] = np.argmax(self.strategy.policy[i+j])
+                print_array[i,j] = np.argmax(self.strategy.policy[i*4+j])
         print(print_array)

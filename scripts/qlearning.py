@@ -4,8 +4,8 @@ import math
 
 class Qlearning(LearningStrategy):
 
-    def __init__(self, mdp, learning_rate, decay_rate, random_probability, epsilon_max = 1.0, epsilon_min = 0.01):
-        LearningStrategy.__init__(self, mdp, learning_rate, decay_rate, random_probability, epsilon_max, epsilon_min)
+    def __init__(self, mdp, learning_rate, decay_rate, epsilon_max = 1.0, epsilon_min = 0.01):
+        LearningStrategy.__init__(self, mdp, learning_rate, decay_rate, epsilon_max, epsilon_min)
         self.states = mdp.get_states()
         self.actions = mdp.get_actions()
         self.qvalues = np.zeros((len(self.states), len(self.actions)))
