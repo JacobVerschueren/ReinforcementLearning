@@ -1,5 +1,6 @@
 import unittest
 from scripts.markovDecisionProcess import MarkovDecisionProcess
+from scripts.percept import Percept
 
 
 class TestMdp(unittest.TestCase):
@@ -7,8 +8,8 @@ class TestMdp(unittest.TestCase):
     def setUp(self):
         self.mdp = MarkovDecisionProcess()
         self.mdp.reset()
-        self.mdp.update([0,2,1,1,False])
-        self.mdp.update([0,2,4,2,False])
+        self.mdp.update(Percept(0,2,1,1,False))
+        self.mdp.update(Percept(0,2,4,2,False))
 
     def test_rewards(self):
         self.assertEqual(self.mdp.rewards[0, 2, 1], 1)

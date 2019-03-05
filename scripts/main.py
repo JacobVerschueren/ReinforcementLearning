@@ -1,22 +1,22 @@
 from scripts.markovDecisionProcess import MarkovDecisionProcess
 from scripts.qlearning import Qlearning
-from scripts.learningAlgorithm import LearningAlgorithm
-import matplotlib
+from scripts.agent import Agent
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-class main:
+class Main:
 
     mdp = MarkovDecisionProcess(0, range(16), range(4))
-    strategy = Qlearning(mdp, 1, 1,1.0, 0.01)
-    algorithm = LearningAlgorithm(strategy, 'FrozenLake-v0')
-    algorithm.learn(100)
+    strategy = Qlearning(mdp, 1, 0.1, 1.0, 0.01)
+    algorithm = Agent(strategy, 'FrozenLake-v0')
+    algorithm.learn(10)
 
     """
     Use code below to visualise evolution of epsilon
     When not needed comment out as well as code in learningstrategy.py
     """
+
     s = strategy.epsilon_seq
     t = np.arange(0.0, len(s))
 
@@ -28,4 +28,5 @@ class main:
     ax.grid()
 
     plt.show()
+
 

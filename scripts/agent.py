@@ -1,10 +1,14 @@
 from scripts.learningStrategy import LearningStrategy
-from scripts.markovDecisionProcess import MarkovDecisionProcess
+from scripts.percept import Percept
 import gym
-import random
 import numpy as np
 
-class LearningAlgorithm:
+
+class Agent:
+    """
+    Algorithm that performs actions (dictated by the learning strategy) in the environment
+    and passes the information gained back to the learning strategy
+    """
 
     def __init__(self, strategy: LearningStrategy, environment):
         self.environment = gym.make(environment)
@@ -25,12 +29,12 @@ class LearningAlgorithm:
                 print('Action: ', action)
                 new_state, reward, final_state, unnecessary_prob = self.environment.step(action)
                 print('new_state: ', new_state)
-                percept = [self.state, action, new_state, reward, final_state]
+                percept = Percept(self.state, action, new_state, reward, final_state)
                 print('percept: ', percept)
                 self.strategy.learn(percept, episode_count)
-                self.state = percept[2]
+                self.state = percept.new_state
                 print('State after update: ', self.state, '\n')
-                episode_done = percept[4]
+                episode_done = percept.final_state
 
             self.state = self.environment.reset()
             episode_count += 1
@@ -43,3 +47,5 @@ class LearningAlgorithm:
             for j in range (4):
                 print_array[i,j] = np.argmax(self.strategy.policy[i*4+j])
         print(print_array)
+        #  print(self.strategy.mdp.rewards[14])
+        #  print(self.strategy.mdp.rsa[14])
