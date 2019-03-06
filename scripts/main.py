@@ -10,7 +10,9 @@ class Main:
     mdp = MarkovDecisionProcess(0, range(16), range(4))
     strategy = Qlearning(mdp, 1, 0.1, 1.0, 0.01)
     algorithm = Agent(strategy, 'FrozenLake-v0')
-    algorithm.learn(10)
+    # algorithm.start_view()
+    # algorithm.view.update(algorithm.visualisationList)
+    algorithm.learn(1000)
 
     """
     Use code below to visualise evolution of epsilon
