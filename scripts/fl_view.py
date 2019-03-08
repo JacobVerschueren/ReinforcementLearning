@@ -6,13 +6,23 @@ from kivy.clock import Clock
 from scripts.agent import Agent
 from scripts.markovDecisionProcess import MarkovDecisionProcess
 from scripts.qlearning import Qlearning
+from scripts.nstepqlearning import NstepQlearning
+from scripts.monteCarlo import MonteCarlo
+from scripts.valueIteration import ValueIteration
 kivy.require('1.10.1')
 
 
 class FlGame(GridLayout):
+    """
+    grid layout visualisation of Frozen Lake game
+    the learning algorithm is initialised within so make adjustments here
+    """
     n_episodes = 50000
     mdp = MarkovDecisionProcess(0, range(16), range(4))
-    strategy = Qlearning(mdp, 0.8, 0.01, 1.0, 0.01)
+    # strategy = Qlearning(mdp, 0.8, 0.01, 1.0, 0.01)
+    # strategy = NstepQlearning(mdp, 0.8, 0.01, 4, 1.0, 0.01)
+    # strategy = MonteCarlo(mdp, 0.8, 0.01, 1.0, 0.01)
+    strategy = NstepQlearning(mdp, 0.8, 0.01, 0.95, 1.0, 0.01)
     algorithm = Agent(strategy, 'FrozenLake-v0')
     state0 = ObjectProperty(None)
     state1 = ObjectProperty(None)
@@ -34,6 +44,7 @@ class FlGame(GridLayout):
     def update(self, dt):
         if self.algorithm.strategy.episode_count < self.n_episodes:
             self.algorithm.learn(1)
+        # print(self.algorithm.strategy.episode_count)
         actions = self.algorithm.visualisationList
         self.state0.text = actions[0]
         self.state1.text = actions[1]
@@ -50,29 +61,14 @@ class FlGame(GridLayout):
 
 class FlApp(App):
     """
-    def __init__(self):
-        self.actions = np.chararray(16, unicode=True)
-        self.actions[:] = '\u2190'
+    run this to start
     """
-
-    """
-    fl = FlGame()
-    actions = np.chararray(16, unicode=True)
-    actions[:] = '\u2190'
-    """
-
-    # fl = FlGame()
 
     def build(self):
         fl = FlGame()
         Clock.schedule_interval(fl.update, 5.0 / 60.0)
-        # self.fl.algorithm.learn(500)
         return fl
 
-    """
-    def update(self, actions):
-        fl.update(actions)
-    """
 
 if __name__ == '__main__':
     FlApp().run()

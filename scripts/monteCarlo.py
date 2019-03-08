@@ -3,17 +3,16 @@ from scripts.percept import Percept
 import numpy as np
 
 
-class NstepQlearning(LearningStrategy):
+class MonteCarlo(LearningStrategy):
     """
-    N-step q-learning subclass of the learning strategy
+    Monte Carlo subclass of the learning strategy
     """
 
-    def __init__(self, mdp, learning_rate, decay_rate, number_of_steps, epsilon_max = 1.0, epsilon_min = 0.01):
+    def __init__(self, mdp, learning_rate, decay_rate, epsilon_max = 1.0, epsilon_min = 0.01):
         LearningStrategy.__init__(self, mdp, learning_rate, decay_rate, epsilon_max, epsilon_min)
         self.states = mdp.get_states()
         self.actions = mdp.get_actions()
         self.qvalues = np.zeros((len(self.states), len(self.actions)))
-        self.number_of_steps = number_of_steps
         self.percept_list = []
 
     def evaluate(self, percept: Percept):
@@ -22,7 +21,7 @@ class NstepQlearning(LearningStrategy):
         n_percepts = len(self.percept_list)
         plist = self.percept_list
 
-        if n_percepts >= self.number_of_steps:
+        if percept.final_state:
             for i in range(n_percepts):
                 max_qa = np.max(self.qvalues[plist[i].new_state])
                 self.qvalues[plist[i].old_state, plist[i].action] -= \
