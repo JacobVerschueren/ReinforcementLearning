@@ -2,7 +2,6 @@ from scripts.learningStrategy import LearningStrategy
 from scripts.percept import Percept
 import gym
 import numpy as np
-# from scripts.fl_view import FlApp
 
 
 class Agent:
@@ -18,12 +17,6 @@ class Agent:
         self.visualisationList = np.chararray(self.strategy.n_states, unicode=True)
         self.visualisationList[:] = '\u2190'
         self.fl_actions = ['\u2190', '\u2193', '\u2192', '\u2191']  # arrow characters for the frozen lake game
-        #self.view = FlApp()
-
-    """
-    def start_view(self):
-        self.view.run()
-    """
 
     def learn(self, n_episodes):
         episode_count = 0
@@ -41,7 +34,7 @@ class Agent:
                 # print('new_state: ', new_state)
                 percept = Percept(self.state, action, new_state, reward, final_state)
                 # print('percept: ', percept)
-                self.strategy.learn(percept, episode_count)
+                self.strategy.learn(percept) # TODO if view test doesn't work add count
                 self.state = percept.new_state
                 # print('State after update: ', self.state, '\n')
                 episode_done = percept.final_state
@@ -53,17 +46,3 @@ class Agent:
             for i in range(self.strategy.n_states):
                 self.visualisationList[i] = self.fl_actions[max_policy[i]]
             # print(self.visualisationList)
-            # self.view.fl.update(self.visualisationList)
-
-
-        # TODO betere visualisatie
-        # actions = ['left ', 'down ', 'right', ' up  ']
-        """
-        print_array = np.zeros((4,4))
-        for i in range(4):
-            for j in range (4):
-                print_array[i,j] = np.argmax(self.strategy.policy[i*4+j])
-        print(print_array)
-        """
-        #  print(self.strategy.mdp.rewards[14])
-        #  print(self.strategy.mdp.rsa[14])

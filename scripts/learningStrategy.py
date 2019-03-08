@@ -3,6 +3,7 @@ import abc
 import math
 from scripts.markovDecisionProcess import MarkovDecisionProcess
 
+
 class LearningStrategy(abc.ABC):
 
     def __init__(self, mdp: MarkovDecisionProcess, learning_rate, decay_rate, epsilon_max = 1.0, epsilon_min = 0.01):
@@ -16,12 +17,14 @@ class LearningStrategy(abc.ABC):
         self.n_actions = len(self.mdp.actions)
         self.policy = np.full((len(mdp.states), len(mdp.actions)), 1/self.n_actions)
         self.v_values = np.zeros((len(mdp.states)))
-        self.γ = 0.4 #TODO is this ok?
+        self.γ = 0.1 #TODO is this ok?
         self.epsilon_seq = [1.0]  # for epsilon decay visualisation
+        self.episode_count = 0
 
-    def learn(self, percept, episode_num):
+    def learn(self, percept):
         self.evaluate(percept)
-        self.improve(episode_num)
+        self.improve(self.episode_count)
+        self.episode_count += 1
 
     @abc.abstractmethod
     def evaluate(self, percept):

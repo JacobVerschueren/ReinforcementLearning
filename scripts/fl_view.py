@@ -1,19 +1,18 @@
 import kivy
 from kivy.properties import ObjectProperty
-kivy.require('1.10.1')
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
-import numpy as np
-# from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from scripts.agent import Agent
 from scripts.markovDecisionProcess import MarkovDecisionProcess
 from scripts.qlearning import Qlearning
+kivy.require('1.10.1')
 
 
 class FlGame(GridLayout):
+    n_episodes = 50000
     mdp = MarkovDecisionProcess(0, range(16), range(4))
-    strategy = Qlearning(mdp, 1, 0.1, 1.0, 0.01)
+    strategy = Qlearning(mdp, 0.8, 0.01, 1.0, 0.01)
     algorithm = Agent(strategy, 'FrozenLake-v0')
     state0 = ObjectProperty(None)
     state1 = ObjectProperty(None)
@@ -33,8 +32,9 @@ class FlGame(GridLayout):
     state15 = ObjectProperty(None)
 
     def update(self, dt):
+        if self.algorithm.strategy.episode_count < self.n_episodes:
+            self.algorithm.learn(1)
         actions = self.algorithm.visualisationList
-        # actions = dt
         self.state0.text = actions[0]
         self.state1.text = actions[1]
         self.state2.text = actions[2]
@@ -61,15 +61,17 @@ class FlApp(App):
     actions[:] = '\u2190'
     """
 
+    # fl = FlGame()
+
     def build(self):
         fl = FlGame()
-        Clock.schedule_interval(fl.update, 60.0 / 60.0)
-        fl.algorithm.learn(100)
+        Clock.schedule_interval(fl.update, 5.0 / 60.0)
+        # self.fl.algorithm.learn(500)
         return fl
 
     """
     def update(self, actions):
-        self.fl.update(actions)
+        fl.update(actions)
     """
 
 if __name__ == '__main__':

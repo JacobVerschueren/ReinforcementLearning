@@ -10,8 +10,6 @@ class Main:
     mdp = MarkovDecisionProcess(0, range(16), range(4))
     strategy = Qlearning(mdp, 1, 0.1, 1.0, 0.01)
     algorithm = Agent(strategy, 'FrozenLake-v0')
-    # algorithm.start_view()
-    # algorithm.view.update(algorithm.visualisationList)
     algorithm.learn(1000)
 
     """
@@ -19,6 +17,7 @@ class Main:
     When not needed comment out as well as code in learningstrategy.py
     """
 
+    """
     s = strategy.epsilon_seq
     t = np.arange(0.0, len(s))
 
@@ -30,5 +29,5 @@ class Main:
     ax.grid()
 
     plt.show()
-
+    """
 
