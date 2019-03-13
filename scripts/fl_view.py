@@ -19,10 +19,10 @@ class FlGame(GridLayout):
     """
     n_episodes = 50000
     mdp = MarkovDecisionProcess(0, range(16), range(4))
-    # strategy = Qlearning(mdp, 0.8, 0.01, 1.0, 0.01)
-    # strategy = NstepQlearning(mdp, 0.8, 0.01, 4, 1.0, 0.01)
-    # strategy = MonteCarlo(mdp, 0.8, 0.01, 1.0, 0.01)
-    strategy = NstepQlearning(mdp, 0.8, 0.01, 0.95, 1.0, 0.01)
+    # strategy = Qlearning(mdp, 0.8, 0.001, 1.0, 0.01)
+    # strategy = NstepQlearning(mdp, 0.8, 0.001, 5, 1.0, 0.01)
+    # strategy = MonteCarlo(mdp, 0.8, 0.001, 1.0, 0.01)
+    strategy = ValueIteration(mdp, 0.8, 0.001, 0.90, 1.0, 0.05)
     algorithm = Agent(strategy, 'FrozenLake-v0')
     state0 = ObjectProperty(None)
     state1 = ObjectProperty(None)
@@ -44,7 +44,7 @@ class FlGame(GridLayout):
     def update(self, dt):
         if self.algorithm.strategy.episode_count < self.n_episodes:
             self.algorithm.learn(1)
-        # print(self.algorithm.strategy.episode_count)
+        print(self.algorithm.strategy.episode_count)
         actions = self.algorithm.visualisationList
         self.state0.text = actions[0]
         self.state1.text = actions[1]

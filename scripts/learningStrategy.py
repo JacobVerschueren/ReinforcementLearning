@@ -21,7 +21,7 @@ class LearningStrategy(abc.ABC):
         self.n_actions = len(self.mdp.actions)
         self.policy = np.full((len(mdp.states), len(mdp.actions)), 1/self.n_actions)
         self.v_values = np.zeros((len(mdp.states)))
-        self.γ = 0.1
+        self.γ = 0.6
         # self.epsilon_seq = [1.0]  # uncomment for epsilon decay visualisation
         self.episode_count = 0
 
@@ -54,7 +54,8 @@ class LearningStrategy(abc.ABC):
                     self.policy[s, a] = self.ε / self.n_actions
 
         # old_random = self.ε #uncomment for epsilon decay visualisation
-        self.ε = self.epsilon_min + (self.epsilon_max - self.epsilon_min) * math.exp((-self.λ) * episode_num)
+        if self.ε > self.epsilon_min:
+            self.ε = self.epsilon_min + (self.epsilon_max - self.epsilon_min) * math.exp((-self.λ) * episode_num)
 
         """
         # uncomment for epsilon decay visualisation
