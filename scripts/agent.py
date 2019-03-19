@@ -1,5 +1,6 @@
-from scripts.learningStrategy import LearningStrategy
+from scripts.learning_strategies.learningStrategy import LearningStrategy
 from scripts.percept import Percept
+from scripts.utils.makeGraph import MakeGraph
 import gym
 import numpy as np
 
@@ -23,26 +24,31 @@ class Agent:
         while episode_count < n_episodes:
             episode_done = False
             while not episode_done:
-                # print('old_state: ', self.state)
-                # print(self.strategy.policy[self.state])
                 action = np.random.choice(
                     self.strategy.mdp.actions,
                     1,
                     p=self.strategy.policy[self.state])[0]
-                # print('Action: ', action)
+
                 new_state, reward, final_state, unnecessary_prob = self.environment.step(action)
-                # print('new_state: ', new_state)
                 percept = Percept(self.state, action, new_state, reward, final_state)
-                # print('percept: ', percept)
-                self.strategy.learn(percept) # TODO if view test doesn't work add count
+                self.strategy.learn(percept)
                 self.state = percept.new_state
-                # print('State after update: ', self.state, '\n')
                 episode_done = percept.final_state
 
             self.state = self.environment.reset()
-            episode_count += 1
+            self.strategy.episode_count += 1
+            episode_count = self.strategy.episode_count
+
             # updating the visualization list
             max_policy = np.argmax(self.strategy.policy, axis=1)
             for i in range(self.strategy.n_states):
                 self.visualisationList[i] = self.fl_actions[max_policy[i]]
-            # print(self.visualisationList)
+
+            """
+            if self.strategy.episode_count%1000 == 0:
+                print(np.reshape(self.strategy.v_values, (4, -1)))
+                print(self.strategy.qvalues)
+            """
+            if self.strategy.episode_count % 100 == 0:
+                graph = MakeGraph("Average reward over 100 episodes", self.strategy.percentage_rewardlist, "reward over last 100")
+                graph.drawGraph()

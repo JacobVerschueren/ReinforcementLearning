@@ -1,4 +1,4 @@
-from scripts.learningStrategy import LearningStrategy
+from scripts.learning_strategies.learningStrategy import LearningStrategy
 from scripts.percept import Percept
 import numpy as np
 
@@ -8,8 +8,8 @@ class MonteCarlo(LearningStrategy):
     Monte Carlo subclass of the learning strategy
     """
 
-    def __init__(self, mdp, learning_rate, decay_rate, epsilon_max = 1.0, epsilon_min = 0.01):
-        LearningStrategy.__init__(self, mdp, learning_rate, decay_rate, epsilon_max, epsilon_min)
+    def __init__(self, mdp, learning_rate, decay_rate, gamma, epsilon_max = 1.0, epsilon_min = 0.01):
+        LearningStrategy.__init__(self, mdp, learning_rate, decay_rate, gamma, epsilon_max, epsilon_min)
         self.states = mdp.get_states()
         self.actions = mdp.get_actions()
         self.qvalues = np.zeros((len(self.states), len(self.actions)))

@@ -1,11 +1,14 @@
 from scripts.markovDecisionProcess import MarkovDecisionProcess
-from scripts.qlearning import Qlearning
+from scripts.learning_strategies.qlearning import Qlearning
+from scripts.learning_strategies.nstepqlearning import NstepQlearning
+from scripts.learning_strategies.monteCarlo import MonteCarlo
 from scripts.agent import Agent
-import matplotlib.pyplot as plt
-import numpy as np
 
 
 class Main:
+    """
+    Solely for testing purposes. Do not use.
+    """
 
     mdp = MarkovDecisionProcess(0, range(16), range(4))
     strategy = Qlearning(mdp, 1, 0.1, 1.0, 0.01)

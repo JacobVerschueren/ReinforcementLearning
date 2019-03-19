@@ -5,10 +5,11 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.clock import Clock
 from scripts.agent import Agent
 from scripts.markovDecisionProcess import MarkovDecisionProcess
-from scripts.qlearning import Qlearning
-from scripts.nstepqlearning import NstepQlearning
-from scripts.monteCarlo import MonteCarlo
-from scripts.valueIteration import ValueIteration
+from scripts.learning_strategies.qlearning import Qlearning
+from scripts.learning_strategies.nstepqlearning import NstepQlearning
+from scripts.learning_strategies.monteCarlo import MonteCarlo
+from scripts.learning_strategies.valueIteration import ValueIteration
+
 kivy.require('1.10.1')
 
 
@@ -19,10 +20,10 @@ class FlGame(GridLayout):
     """
     n_episodes = 50000
     mdp = MarkovDecisionProcess(0, range(16), range(4))
-    # strategy = Qlearning(mdp, 0.8, 0.001, 1.0, 0.01)
-    # strategy = NstepQlearning(mdp, 0.8, 0.001, 5, 1.0, 0.01)
-    # strategy = MonteCarlo(mdp, 0.8, 0.001, 1.0, 0.01)
-    strategy = ValueIteration(mdp, 0.8, 0.001, 0.90, 1.0, 0.05)
+    strategy = Qlearning(mdp, 0.8, 0.01, 0.01, 1.0, 0.01)
+    # strategy = NstepQlearning(mdp, 0.8, 0.001, 0.7, 5, 1.0, 0.01)
+    # strategy = MonteCarlo(mdp, 0.8, 0.001, 0.6, 1.0, 0.01)
+    # strategy = ValueIteration(mdp, 0.8, 0.001, 0.90, 0.9, 1.0, 0.01)
     algorithm = Agent(strategy, 'FrozenLake-v0')
     state0 = ObjectProperty(None)
     state1 = ObjectProperty(None)
@@ -44,7 +45,8 @@ class FlGame(GridLayout):
     def update(self, dt):
         if self.algorithm.strategy.episode_count < self.n_episodes:
             self.algorithm.learn(1)
-        print(self.algorithm.strategy.episode_count)
+        if self.algorithm.strategy.episode_count % 100 == 0:
+            print(self.algorithm.strategy.episode_count)
         actions = self.algorithm.visualisationList
         self.state0.text = actions[0]
         self.state1.text = actions[1]
@@ -66,7 +68,7 @@ class FlApp(App):
 
     def build(self):
         fl = FlGame()
-        Clock.schedule_interval(fl.update, 5.0 / 60.0)
+        Clock.schedule_interval(fl.update, 0.5 / 60.0)
         return fl
 
 

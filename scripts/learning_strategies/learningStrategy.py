@@ -10,7 +10,7 @@ class LearningStrategy(abc.ABC):
     improve method only works when v-values are used, if anything else is needed this needs to be adjusted
     """
 
-    def __init__(self, mdp: MarkovDecisionProcess, learning_rate, decay_rate, epsilon_max = 1.0, epsilon_min = 0.01):
+    def __init__(self, mdp: MarkovDecisionProcess, learning_rate, decay_rate, gamma, epsilon_max = 1.0, epsilon_min = 0.01):
         self.α = learning_rate
         self.λ = decay_rate
         self.ε = epsilon_max
@@ -21,18 +21,37 @@ class LearningStrategy(abc.ABC):
         self.n_actions = len(self.mdp.actions)
         self.policy = np.full((len(mdp.states), len(mdp.actions)), 1/self.n_actions)
         self.v_values = np.zeros((len(mdp.states)))
-        self.γ = 0.6
+        self.γ = gamma
         # self.epsilon_seq = [1.0]  # uncomment for epsilon decay visualisation
         self.episode_count = 0
+        self.reward = 0
+        self.rewards = np.zeros(100, dtype=int)
+        self.percentage_rewardlist = np.zeros(1, dtype=int)
 
     def learn(self, percept):
+        # print(percept.final_state)
+        # print(self.percentage_rewardlist)
         self.evaluate(percept)
         self.improve(self.episode_count)
-        self.episode_count += 1
+        self.reward += percept.reward
+        if percept.final_state:
+            # print(percept.final_state)
+            # print(self.rewards)
+            self.rewards = np.insert(self.rewards[0:-1], 0, self.reward)
+            self.reward = 0
+            # print(self.percentage_rewardlist)
+            # print(np.sum(self.rewards))
+            if self.episode_count%100 == 0:
+                r = np.sum(self.rewards)/100
+                # print(np.sum(self.rewards))
+                self.percentage_rewardlist = np.append(self.percentage_rewardlist, r)
+                # print(self.rewards)
+
 
     @abc.abstractmethod
     def evaluate(self, percept):
         pass
+
 
     # @abc.abstractmethod
     def improve(self, episode_num):
