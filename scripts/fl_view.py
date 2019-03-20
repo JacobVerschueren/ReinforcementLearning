@@ -20,8 +20,8 @@ class FlGame(GridLayout):
     """
     n_episodes = 50000
     mdp = MarkovDecisionProcess(0, range(16), range(4))
-    strategy = Qlearning(mdp, 0.8, 0.01, 0.01, 1.0, 0.01)
-    # strategy = NstepQlearning(mdp, 0.8, 0.001, 0.7, 5, 1.0, 0.01)
+    strategy = Qlearning(mdp, 0.8, 0.01, 0.6, 1.0, 0.01)
+    # strategy = NstepQlearning(mdp, 0.8, 0.001, 0.6, 5, 1.0, 0.01)
     # strategy = MonteCarlo(mdp, 0.8, 0.001, 0.6, 1.0, 0.01)
     # strategy = ValueIteration(mdp, 0.8, 0.001, 0.90, 0.9, 1.0, 0.01)
     algorithm = Agent(strategy, 'FrozenLake-v0')

@@ -50,5 +50,5 @@ class Agent:
                 print(self.strategy.qvalues)
             """
             if self.strategy.episode_count % 100 == 0:
-                graph = MakeGraph("Average reward over 100 episodes", self.strategy.percentage_rewardlist, "reward over last 100")
+                graph = MakeGraph("Average reward over 100 episodes", self.strategy.percentage_rewardlist, "reward over last 100", "episodes (x100)")
                 graph.drawGraph()

@@ -21,7 +21,7 @@ class Qlearning(LearningStrategy):
         max_qa = np.max(self.qvalues[p.new_state])
         self.qvalues[p.old_state, p.action] += \
             (self.α * (self.mdp.get_specific_rsa(p.old_state, p.action) + self.γ *
-                       (max_qa - self.qvalues[p.old_state, p.action])))
+                       max_qa - self.qvalues[p.old_state, p.action]))
 
         for s in range(self.n_states):
             self.v_values[s] = np.max(self.qvalues[s])
